@@ -11,6 +11,29 @@
   "type": "header",
   "name": "t:names.header",
   "sections": {
+    "announcement_banner_collapsible_WVHRpn": {
+      "type": "announcement-banner-collapsible",
+      "name": "Announcement Banner",
+      "settings": {
+        "enable_banner": true,
+        "title": "Christmas delivery",
+        "message": "Order now to make sure your gifts arrive in time for Christmas!",
+        "link_text": "Find out more",
+        "link_url": "shopify://pages/contact",
+        "open_link_new_tab": false,
+        "show_icon": true,
+        "icon_type": "warning",
+        "dismissible": true,
+        "auto_dismiss": false,
+        "auto_dismiss_delay": 10,
+        "background_color": "#fff4e6",
+        "text_color": "#333333",
+        "link_color": "#0066CC",
+        "icon_color": "#ff6b00",
+        "padding_top": 12,
+        "padding_bottom": 12
+      }
+    },
     "header_announcements_9jGBFp": {
       "type": "header-announcements",
       "blocks": {
@@ -112,6 +135,7 @@
     }
   },
   "order": [
+    "announcement_banner_collapsible_WVHRpn",
     "header_announcements_9jGBFp",
     "header_section"
   ]
