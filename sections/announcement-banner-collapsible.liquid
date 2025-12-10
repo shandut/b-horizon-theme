@@ -1,0 +1,474 @@
+{% comment %}
+  Collapsible Announcement Banner Section
+  A dismissible banner for important announcements like delivery notices
+{% endcomment %}
+
+{%- liquid
+  assign banner_id = 'announcement-banner-' | append: section.id
+  assign is_dismissed_key = 'dismissed_' | append: banner_id
+-%}
+
+{%- if section.settings.enable_banner -%}
+  <div 
+    id="{{ banner_id }}"
+    class="announcement-banner-collapsible"
+    data-section-id="{{ section.id }}"
+    style="
+      --banner-bg-color: {{ section.settings.background_color }};
+      --banner-text-color: {{ section.settings.text_color }};
+      --banner-link-color: {{ section.settings.link_color }};
+      --banner-icon-color: {{ section.settings.icon_color }};
+      --banner-padding-top: {{ section.settings.padding_top }}px;
+      --banner-padding-bottom: {{ section.settings.padding_bottom }}px;
+    "
+  >
+    <div class="announcement-banner__container">
+      <div class="announcement-banner__content">
+        {%- if section.settings.show_icon -%}
+          <div class="announcement-banner__icon" aria-hidden="true">
+            {%- case section.settings.icon_type -%}
+              {%- when 'warning' -%}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              {%- when 'info' -%}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              {%- when 'shipping' -%}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="1" y="3" width="15" height="13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="5.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="18.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              {%- when 'gift' -%}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polyline points="20 12 20 22 4 22 4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="2" y="7" width="20" height="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="12" y1="22" x2="12" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            {%- endcase -%}
+          </div>
+        {%- endif -%}
+        
+        <div class="announcement-banner__message">
+          {%- if section.settings.title != blank -%}
+            <strong class="announcement-banner__title">{{ section.settings.title }}</strong>
+          {%- endif -%}
+          
+          <span class="announcement-banner__text">
+            {{ section.settings.message }}
+            
+            {%- if section.settings.link_text != blank and section.settings.link_url != blank -%}
+              <a 
+                href="{{ section.settings.link_url }}" 
+                class="announcement-banner__link"
+                {% if section.settings.open_link_new_tab %}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                {% endif %}
+              >
+                {{ section.settings.link_text }}
+              </a>
+            {%- endif -%}
+          </span>
+        </div>
+      </div>
+      
+      {%- if section.settings.dismissible -%}
+        <button
+          type="button"
+          class="announcement-banner__close"
+          aria-label="{{ 'general.accessibility.close' | t }}"
+          data-close-banner
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <style>
+    .announcement-banner-collapsible {
+      background-color: var(--banner-bg-color);
+      color: var(--banner-text-color);
+      padding: var(--banner-padding-top) 1rem var(--banner-padding-bottom);
+      position: relative;
+      width: 100%;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      animation: slideDown 0.3s ease-out;
+      overflow: hidden;
+    }
+
+    .announcement-banner-collapsible.banner--hiding {
+      animation: slideUp 0.3s ease-out forwards;
+    }
+
+    @keyframes slideDown {
+      from {
+        max-height: 0;
+        opacity: 0;
+      }
+      to {
+        max-height: 100px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        max-height: 100px;
+        opacity: 1;
+      }
+      to {
+        max-height: 0;
+        opacity: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    .announcement-banner__container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 0 2.5rem;
+    }
+
+    .announcement-banner__content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .announcement-banner__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--banner-icon-color);
+      flex-shrink: 0;
+    }
+
+    .announcement-banner__icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .announcement-banner__message {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .announcement-banner__title {
+      font-weight: 600;
+      margin-right: 0.25rem;
+    }
+
+    .announcement-banner__text {
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .announcement-banner__link {
+      color: var(--banner-link-color);
+      text-decoration: underline;
+      transition: opacity 0.2s ease;
+      font-weight: 500;
+    }
+
+    .announcement-banner__link:hover {
+      opacity: 0.8;
+    }
+
+    .announcement-banner__close {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--banner-text-color);
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .announcement-banner__close:hover {
+      opacity: 1;
+    }
+
+    /* Mobile styles */
+    @media screen and (max-width: 749px) {
+      .announcement-banner__container {
+        padding: 0 3rem 0 1rem;
+      }
+
+      .announcement-banner__content {
+        text-align: left;
+        justify-content: flex-start;
+      }
+
+      .announcement-banner__message {
+        justify-content: flex-start;
+      }
+
+      .announcement-banner__text {
+        font-size: 0.8125rem;
+      }
+
+      .announcement-banner__close {
+        right: 0.5rem;
+        padding: 0.25rem;
+      }
+    }
+
+    /* Hide banner if JavaScript is disabled and dismissible is true */
+    .no-js .announcement-banner-collapsible[data-dismissible="true"] {
+      display: none;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const banner = document.getElementById('{{ banner_id }}');
+      if (!banner) return;
+
+      const closeButton = banner.querySelector('[data-close-banner]');
+      const bannerId = '{{ banner_id }}';
+      const storageKey = 'announcement_dismissed_' + bannerId;
+      
+      // Check if banner was previously dismissed
+      const isDismissed = sessionStorage.getItem(storageKey) === 'true';
+      
+      if (isDismissed && {{ section.settings.dismissible | json }}) {
+        banner.style.display = 'none';
+        return;
+      }
+
+      // Handle close button click
+      if (closeButton) {
+        closeButton.addEventListener('click', function() {
+          banner.classList.add('banner--hiding');
+          
+          // Store dismissal in session storage
+          sessionStorage.setItem(storageKey, 'true');
+          
+          // Remove element after animation
+          setTimeout(function() {
+            banner.remove();
+          }, 300);
+        });
+      }
+
+      // Auto-dismiss functionality
+      {% if section.settings.auto_dismiss and section.settings.auto_dismiss_delay > 0 %}
+        setTimeout(function() {
+          if (banner && !banner.classList.contains('banner--hiding')) {
+            if (closeButton) {
+              closeButton.click();
+            } else {
+              banner.classList.add('banner--hiding');
+              setTimeout(function() {
+                banner.remove();
+              }, 300);
+            }
+          }
+        }, {{ section.settings.auto_dismiss_delay }} * 1000);
+      {% endif %}
+    });
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Banner",
+  "tag": "section",
+  "class": "announcement-banner-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_banner",
+      "label": "Enable banner",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Christmas delivery",
+      "info": "Optional bold text before the message"
+    },
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Message",
+      "default": "Order now to make sure your gifts arrive in time for Christmas!"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Link text",
+      "default": "Find out more"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_link_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show icon",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "icon_type",
+      "label": "Icon type",
+      "options": [
+        {
+          "value": "warning",
+          "label": "Warning triangle"
+        },
+        {
+          "value": "info",
+          "label": "Information circle"
+        },
+        {
+          "value": "shipping",
+          "label": "Delivery truck"
+        },
+        {
+          "value": "gift",
+          "label": "Gift box"
+        }
+      ],
+      "default": "warning"
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "dismissible",
+      "label": "Allow users to dismiss",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_dismiss",
+      "label": "Auto-dismiss banner",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "auto_dismiss_delay",
+      "label": "Auto-dismiss after (seconds)",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "default": 10,
+      "info": "Only applies if auto-dismiss is enabled"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFF4E6"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#0066CC"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#FF6B00"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Banner",
+      "settings": {
+        "title": "Christmas delivery",
+        "message": "Order now to make sure your gifts arrive in time for Christmas!",
+        "link_text": "Find out more",
+        "show_icon": true,
+        "icon_type": "warning",
+        "background_color": "#FFF4E6",
+        "icon_color": "#FF6B00"
+      }
+    }
+  ]
+}
+{% endschema %}
