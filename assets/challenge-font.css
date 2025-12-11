@@ -1,0 +1,139 @@
+/* Challenge Bold Font for Prices
+   This font is used exclusively for displaying prices throughout the theme
+   Font source: https://cdn.shopify.com/s/files/1/0983/4083/1508/files/Challenge_Bold_Std_Regular.otf
+*/
+
+/* Font Declaration */
+@font-face {
+  font-family: 'Challenge Bold';
+  src: url('https://cdn.shopify.com/s/files/1/0983/4083/1508/files/Challenge_Bold_Std_Regular.otf?v=1765417592') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply Challenge Bold to all price elements */
+.price,
+.price__container,
+.price__regular,
+.price__sale,
+.price-item,
+.price-item--regular,
+.price-item--sale,
+.price-item--last,
+.product-price,
+.product__price,
+.card__price,
+.card-information__price,
+.cart-item__price,
+.cart-item__totals,
+.totals__product-price,
+.totals__subtotal-value,
+.totals__total-value,
+.subtotal__price,
+.tax-line__price,
+.product-form__price,
+.price--large,
+.price--on-sale,
+.price--sold-out,
+.price--unit-price,
+.unit-price,
+.unit-price__price,
+.cart-drawer__subtotal-price,
+.cart__subtotal,
+.cart__total-price,
+.cart-notification__price,
+.quick-add-modal__price,
+.price-per-item,
+.product-card__price,
+.collection-product-card__price,
+.search-result__price,
+.featured-product__price,
+.variant-price,
+[class*="price"] {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* Specific price display styles */
+.price {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Money/Currency elements */
+.money,
+span.money,
+[data-price],
+[data-regular-price],
+[data-sale-price],
+[data-unit-price],
+[data-compare-price] {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* Shopify Currency Converter Support */
+.money-converted,
+.shopify-currency-converter [data-currency],
+.currency-converter-price {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+/* Cart and Checkout specific prices */
+.cart-item__price-wrapper,
+.cart-subtotal__price,
+.cart-total__price,
+.order-summary__price,
+.checkout__price,
+.line-item__price {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* Product page specific prices */
+.product__current-price,
+.product__compare-price,
+.product-single__price,
+.product-single__sale-price,
+.product-single__regular-price {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* Collection page product prices */
+.grid-product__price,
+.collection-grid__price,
+.product-grid-item__price {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* Mini cart prices */
+.mini-cart__price,
+.cart-popup__price,
+.ajax-cart__price {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* Discount and savings */
+.discount-price,
+.savings-price,
+.sale-percentage,
+.discount-badge {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* Ensure Challenge Bold is applied to dynamically loaded prices */
+.price:not(.price--show-badge) .price-item,
+.price--show-badge .price-item {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+/* Override any inline styles for prices */
+[style*="font-family"]:is(.price, .money, [class*="price"]) {
+  font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
