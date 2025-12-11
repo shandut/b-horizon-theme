@@ -1,0 +1,710 @@
+{% comment %}
+  Promotional Grid Section
+  A 3-column grid with:
+  - Large feature card (50% width) with text, button, and image
+  - Product highlight card (25% width)
+  - CTA card (25% width) with background image and overlay
+{% endcomment %}
+
+{%- liquid
+  assign section_id = 'PromoGrid-' | append: section.id
+-%}
+
+<section
+  id="{{ section_id }}"
+  class="promo-grid section section--{{ section.settings.section_width }}"
+  style="
+    --promo-bg-color: {{ section.settings.background_color }};
+    --promo-text-color: {{ section.settings.text_color }};
+    --promo-button-bg: {{ section.settings.button_background }};
+    --promo-button-text: {{ section.settings.button_text_color }};
+    --promo-accent-color: {{ section.settings.accent_color }};
+    --promo-padding-top: {{ section.settings.padding_top }}px;
+    --promo-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="promo-grid__container page-width">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'feature_card' -%}
+          <div 
+            class="promo-grid__card promo-grid__card--feature"
+            style="
+              --card-bg: {{ block.settings.card_background | default: 'var(--promo-bg-color)' }};
+              --card-text: {{ block.settings.card_text_color | default: 'var(--promo-text-color)' }};
+            "
+            {{ block.shopify_attributes }}
+          >
+            <div class="promo-grid__card-content">
+              {%- if block.settings.heading != blank -%}
+                <h2 class="promo-grid__heading">{{ block.settings.heading }}</h2>
+              {%- endif -%}
+              
+              {%- if block.settings.button_label != blank -%}
+                <a 
+                  href="{{ block.settings.button_link }}"
+                  class="promo-grid__button"
+                  style="
+                    --btn-bg: {{ block.settings.button_bg | default: 'var(--promo-button-bg)' }};
+                    --btn-text: {{ block.settings.button_text | default: 'var(--promo-button-text)' }};
+                  "
+                >
+                  {{ block.settings.button_label }}
+                </a>
+              {%- endif -%}
+            </div>
+            
+            {%- if block.settings.image != blank -%}
+              <div class="promo-grid__card-image">
+                {{ block.settings.image | image_url: width: 600 | image_tag:
+                  class: 'promo-grid__image',
+                  loading: 'lazy',
+                  widths: '300, 400, 500, 600',
+                  sizes: '(min-width: 1200px) 300px, (min-width: 750px) 250px, 200px',
+                  alt: block.settings.image.alt | default: block.settings.heading
+                }}
+              </div>
+            {%- endif -%}
+          </div>
+
+        {%- when 'product_card' -%}
+          <div 
+            class="promo-grid__card promo-grid__card--product"
+            style="
+              --card-bg: {{ block.settings.card_background | default: 'var(--promo-bg-color)' }};
+              --card-text: {{ block.settings.card_text_color | default: 'var(--promo-text-color)' }};
+            "
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.product != blank -%}
+              {%- assign product = block.settings.product -%}
+              <a href="{{ product.url }}" class="promo-grid__product-link">
+                {%- if product.featured_image != blank -%}
+                  <div class="promo-grid__product-image">
+                    {{ product.featured_image | image_url: width: 500 | image_tag:
+                      class: 'promo-grid__image',
+                      loading: 'lazy',
+                      widths: '250, 350, 450, 500',
+                      sizes: '(min-width: 1200px) 250px, (min-width: 750px) 200px, 150px',
+                      alt: product.featured_image.alt | default: product.title
+                    }}
+                  </div>
+                {%- endif -%}
+                
+                <div class="promo-grid__product-info">
+                  {%- if block.settings.custom_text != blank -%}
+                    <p class="promo-grid__product-text">{{ block.settings.custom_text }}</p>
+                  {%- else -%}
+                    <p class="promo-grid__product-text">{{ product.title }}</p>
+                  {%- endif -%}
+                  
+                  <div class="promo-grid__product-price">
+                    <span class="promo-grid__price">{{ product.price | money_without_trailing_zeros }}</span>
+                  </div>
+                </div>
+                
+                {%- if block.settings.show_arrows -%}
+                  <div class="promo-grid__arrows" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                {%- endif -%}
+              </a>
+            {%- else -%}
+              <div class="promo-grid__product-placeholder">
+                <p>Select a product</p>
+              </div>
+            {%- endif -%}
+          </div>
+
+        {%- when 'cta_card' -%}
+          <a 
+            href="{{ block.settings.link }}"
+            class="promo-grid__card promo-grid__card--cta"
+            style="
+              --overlay-bg: {{ block.settings.overlay_background | default: '#0066cc' }};
+              --overlay-text: {{ block.settings.overlay_text_color | default: '#ffffff' }};
+            "
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.background_image != blank -%}
+              <div class="promo-grid__cta-background">
+                {{ block.settings.background_image | image_url: width: 800 | image_tag:
+                  class: 'promo-grid__cta-bg-image',
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 1200px) 400px, (min-width: 750px) 300px, 100vw',
+                  alt: ''
+                }}
+              </div>
+            {%- endif -%}
+            
+            <div class="promo-grid__cta-overlay">
+              {%- if block.settings.heading != blank -%}
+                <h3 class="promo-grid__cta-heading">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              
+              {%- if block.settings.link_text != blank -%}
+                <span class="promo-grid__cta-link">
+                  {{ block.settings.link_text }}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              {%- endif -%}
+            </div>
+          </a>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+<style>
+  #{{ section_id }} {
+    padding-top: var(--promo-padding-top);
+    padding-bottom: var(--promo-padding-bottom);
+  }
+
+  .promo-grid__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .promo-grid__container {
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 20px;
+    }
+  }
+
+  /* Base card styles */
+  .promo-grid__card {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Feature Card (Large - 50%) */
+  .promo-grid__card--feature {
+    background-color: var(--card-bg, #006b6b);
+    color: var(--card-text, #ffffff);
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    min-height: 280px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .promo-grid__card--feature {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px;
+      min-height: 320px;
+    }
+  }
+
+  .promo-grid__card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    z-index: 1;
+  }
+
+  .promo-grid__heading {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+    max-width: 280px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .promo-grid__heading {
+      font-size: 2rem;
+    }
+  }
+
+  .promo-grid__button {
+    display: inline-block;
+    background-color: var(--btn-bg, #dc2626);
+    color: var(--btn-text, #ffffff);
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .promo-grid__button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .promo-grid__card-image {
+    flex-shrink: 0;
+    max-width: 45%;
+    margin-top: 20px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .promo-grid__card-image {
+      margin-top: 0;
+      margin-left: 20px;
+    }
+  }
+
+  .promo-grid__card-image .promo-grid__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+    transform: rotate(3deg);
+  }
+
+  /* Product Card (25%) */
+  .promo-grid__card--product {
+    background-color: var(--card-bg, #006b6b);
+    color: var(--card-text, #ffffff);
+    min-height: 280px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .promo-grid__card--product {
+      min-height: 320px;
+    }
+  }
+
+  .promo-grid__product-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+  }
+
+  .promo-grid__product-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 0;
+  }
+
+  .promo-grid__product-image .promo-grid__image {
+    max-width: 100%;
+    max-height: 140px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  @media screen and (min-width: 750px) {
+    .promo-grid__product-image .promo-grid__image {
+      max-height: 160px;
+    }
+  }
+
+  .promo-grid__product-info {
+    margin-top: auto;
+  }
+
+  .promo-grid__product-text {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+    opacity: 0.95;
+  }
+
+  .promo-grid__product-price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .promo-grid__price {
+    font-family: 'Challenge Bold', Georgia, serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: -0.02em;
+  }
+
+  .promo-grid__arrows {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 0;
+    opacity: 0.8;
+  }
+
+  .promo-grid__arrows svg {
+    width: 20px;
+    height: 20px;
+    margin-left: -8px;
+  }
+
+  .promo-grid__arrows svg:first-child {
+    margin-left: 0;
+  }
+
+  .promo-grid__product-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 280px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* CTA Card (25%) */
+  .promo-grid__card--cta {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    min-height: 280px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .promo-grid__card--cta {
+      min-height: 320px;
+    }
+  }
+
+  .promo-grid__cta-background {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .promo-grid__cta-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .promo-grid__cta-overlay {
+    background-color: var(--overlay-bg, #0066cc);
+    color: var(--overlay-text, #ffffff);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .promo-grid__cta-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .promo-grid__cta-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .promo-grid__cta-link svg {
+    width: 18px;
+    height: 18px;
+    margin-left: -6px;
+  }
+
+  .promo-grid__cta-link svg:first-of-type {
+    margin-left: 4px;
+  }
+
+  /* Hover effects */
+  .promo-grid__card--cta:hover .promo-grid__cta-bg-image {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+
+  .promo-grid__product-link:hover {
+    opacity: 0.95;
+  }
+
+  /* Mobile stacking */
+  @media screen and (max-width: 749px) {
+    .promo-grid__card--feature {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .promo-grid__card-image {
+      margin-top: 0;
+      margin-left: auto;
+    }
+
+    .promo-grid__card--product,
+    .promo-grid__card--cta {
+      min-height: 260px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Promo Grid",
+  "tag": "section",
+  "class": "section-promo-grid",
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Default card background",
+      "default": "#006b6b"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Default text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Default button background",
+      "default": "#dc2626"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Default button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#ffab00"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 36,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 36,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_card",
+      "name": "Feature card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "NEW Christmas Gift Guide out now!"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "View catalogue"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "card_background",
+          "label": "Background color"
+        },
+        {
+          "type": "color",
+          "id": "card_text_color",
+          "label": "Text color"
+        },
+        {
+          "type": "color",
+          "id": "button_bg",
+          "label": "Button background"
+        },
+        {
+          "type": "color",
+          "id": "button_text",
+          "label": "Button text color"
+        }
+      ]
+    },
+    {
+      "type": "product_card",
+      "name": "Product card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "custom_text",
+          "label": "Custom description",
+          "info": "Leave blank to use product title"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_arrows",
+          "label": "Show navigation arrows",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "card_background",
+          "label": "Background color"
+        },
+        {
+          "type": "color",
+          "id": "card_text_color",
+          "label": "Text color"
+        }
+      ]
+    },
+    {
+      "type": "cta_card",
+      "name": "CTA card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "Background image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Redeem flybuys points in store"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Find out more"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "header",
+          "content": "Overlay colors"
+        },
+        {
+          "type": "color",
+          "id": "overlay_background",
+          "label": "Overlay background",
+          "default": "#0066cc"
+        },
+        {
+          "type": "color",
+          "id": "overlay_text_color",
+          "label": "Overlay text color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo Grid",
+      "blocks": [
+        {
+          "type": "feature_card",
+          "settings": {
+            "heading": "NEW Christmas Gift Guide out now!",
+            "button_label": "View catalogue"
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "custom_text": "Don't miss this JVC 55\" 4K QLED Smart TV",
+            "show_arrows": true
+          }
+        },
+        {
+          "type": "cta_card",
+          "settings": {
+            "heading": "Redeem flybuys points in store",
+            "link_text": "Find out more"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
