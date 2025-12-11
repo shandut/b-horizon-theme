@@ -87,14 +87,86 @@
             </button>
           </div>
 
-          {%- comment -%} Predictive Search Results Container {%- endcomment -%}
+          {%- comment -%} Search Dropdown Container {%- endcomment -%}
           <div 
-            class="bunnings-search__results"
-            data-predictive-search-results
+            class="bunnings-search__dropdown"
+            data-search-dropdown
             style="display: none;"
           >
-            <div class="bunnings-search__results-inner">
-              <!-- Results will be populated here via JavaScript -->
+            <div class="bunnings-search__dropdown-inner">
+              {%- comment -%} Recent Searches Section {%- endcomment -%}
+              <div class="bunnings-search__recent" data-recent-searches style="display: none;">
+                <div class="bunnings-search__section-header">
+                  <h3 class="bunnings-search__section-title">Recent searches</h3>
+                  <button 
+                    type="button" 
+                    class="bunnings-search__close-btn"
+                    data-close-search
+                    aria-label="Close search"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+                <ul class="bunnings-search__recent-list" data-recent-list>
+                  <!-- Recent searches will be populated here -->
+                </ul>
+                <button 
+                  type="button" 
+                  class="bunnings-search__clear-recent"
+                  data-clear-recent
+                >
+                  Clear recent searches
+                </button>
+              </div>
+
+              {%- comment -%} Popular Products Section {%- endcomment -%}
+              <div class="bunnings-search__popular" data-popular-section>
+                <h3 class="bunnings-search__section-title">Popular right now</h3>
+                <div class="bunnings-search__popular-items">
+                  {%- for i in (1..4) -%}
+                    {%- assign product_handle_key = 'popular_product_' | append: i -%}
+                    {%- assign product_handle = section.settings[product_handle_key] -%}
+                    {%- if product_handle != blank -%}
+                      {%- assign product = all_products[product_handle] -%}
+                      {%- if product != blank -%}
+                        <a href="{{ product.url }}" class="bunnings-search__popular-item">
+                          {%- if product.featured_image -%}
+                            <div class="bunnings-search__popular-image">
+                              {{ product.featured_image | image_url: width: 100 | image_tag:
+                                loading: 'lazy',
+                                alt: product.title
+                              }}
+                            </div>
+                          {%- endif -%}
+                          <div class="bunnings-search__popular-content">
+                            <h4 class="bunnings-search__popular-title">{{ product.title }}</h4>
+                            <div class="bunnings-search__popular-meta">
+                              {%- if product.metafields.custom.category != blank -%}
+                                <span class="bunnings-search__popular-category">
+                                  {{ product.metafields.custom.category }}
+                                </span>
+                              {%- endif -%}
+                              {%- for collection in product.collections limit: 2 -%}
+                                {%- unless forloop.first -%}<span class="bunnings-search__separator">|</span>{%- endunless -%}
+                                <span class="bunnings-search__popular-collection">
+                                  {{ collection.title }}
+                                </span>
+                              {%- endfor -%}
+                            </div>
+                          </div>
+                        </a>
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+
+              {%- comment -%} Search Results Section (hidden initially) {%- endcomment -%}
+              <div class="bunnings-search__results" data-search-results style="display: none;">
+                <!-- Search results will be populated here -->
+              </div>
             </div>
           </div>
         </div>
@@ -286,21 +358,178 @@
     opacity: 0.8;
   }
 
-  /* Search Results Dropdown */
-  .bunnings-search__results {
+  /* Search Dropdown Container */
+  .bunnings-search__dropdown {
     position: absolute;
     top: calc(100% + 0.5rem);
     left: 0;
     right: 0;
     background: white;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    max-height: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    max-height: 600px;
     overflow-y: auto;
     z-index: 1000;
   }
 
-  .bunnings-search__results-inner {
+  .bunnings-search__dropdown-inner {
+    padding: 0;
+  }
+
+  /* Section Headers */
+  .bunnings-search__section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .bunnings-search__section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+
+  .bunnings-search__close-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s ease;
+  }
+
+  .bunnings-search__close-btn:hover {
+    color: #333;
+  }
+
+  /* Recent Searches */
+  .bunnings-search__recent {
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .bunnings-search__recent-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+  }
+
+  .bunnings-search__recent-item {
+    margin: 0;
+  }
+
+  .bunnings-search__recent-link {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .bunnings-search__recent-link:hover {
+    background-color: #f5f5f5;
+  }
+
+  .bunnings-search__clear-recent {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    text-align: left;
+    color: #666;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .bunnings-search__clear-recent:hover {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+
+  /* Popular Products */
+  .bunnings-search__popular {
+    padding: 1rem 1.5rem;
+  }
+
+  .bunnings-search__popular .bunnings-search__section-title {
+    margin-bottom: 1rem;
+  }
+
+  .bunnings-search__popular-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .bunnings-search__popular-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .bunnings-search__popular-item:hover {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+  }
+
+  .bunnings-search__popular-image {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bunnings-search__popular-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .bunnings-search__popular-content {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .bunnings-search__popular-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0 0 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .bunnings-search__popular-meta {
+    font-size: 0.75rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .bunnings-search__separator {
+    color: #ccc;
+  }
+
+  /* Search Results */
+  .bunnings-search__results {
     padding: 1rem;
   }
 
@@ -429,42 +658,152 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.querySelector('.bunnings-search-form');
     const searchInput = document.querySelector('[data-predictive-search-input]');
-    const searchResults = document.querySelector('[data-predictive-search-results]');
+    const searchDropdown = document.querySelector('[data-search-dropdown]');
+    const searchResults = document.querySelector('[data-search-results]');
+    const recentSection = document.querySelector('[data-recent-searches]');
+    const popularSection = document.querySelector('[data-popular-section]');
+    const recentList = document.querySelector('[data-recent-list]');
+    const clearRecentBtn = document.querySelector('[data-clear-recent]');
+    const closeBtn = document.querySelector('[data-close-search]');
+    
     let searchTimeout;
+    const RECENT_SEARCHES_KEY = 'bunnings_recent_searches';
+    const MAX_RECENT_SEARCHES = 5;
 
-    if (searchInput && searchResults) {
-      // Handle search input
-      searchInput.addEventListener('input', function(e) {
-        clearTimeout(searchTimeout);
-        const query = e.target.value.trim();
+    // Get recent searches from localStorage
+    function getRecentSearches() {
+      try {
+        return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
 
-        if (query.length < 2) {
-          searchResults.style.display = 'none';
-          return;
-        }
+    // Save recent search
+    function saveRecentSearch(query) {
+      if (!query || query.length < 2) return;
+      
+      let searches = getRecentSearches();
+      // Remove if already exists
+      searches = searches.filter(s => s.toLowerCase() !== query.toLowerCase());
+      // Add to beginning
+      searches.unshift(query);
+      // Keep only max number
+      searches = searches.slice(0, MAX_RECENT_SEARCHES);
+      
+      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(searches));
+    }
 
-        // Debounce search
-        searchTimeout = setTimeout(() => {
-          performPredictiveSearch(query);
-        }, 300);
-      });
+    // Display recent searches
+    function displayRecentSearches() {
+      const searches = getRecentSearches();
+      
+      if (searches.length === 0) {
+        recentSection.style.display = 'none';
+        return;
+      }
+      
+      recentList.innerHTML = searches.map(search => `
+        <li class="bunnings-search__recent-item">
+          <a href="${window.Shopify.routes.root}search?q=${encodeURIComponent(search)}" 
+             class="bunnings-search__recent-link"
+             data-search-term="${search}">
+            ${search}
+          </a>
+        </li>
+      `).join('');
+      
+      recentSection.style.display = 'block';
+    }
 
-      // Hide results when clicking outside
-      document.addEventListener('click', function(e) {
-        if (!e.target.closest('.bunnings-search__wrapper')) {
-          searchResults.style.display = 'none';
-        }
-      });
+    // Show dropdown on focus
+    searchInput.addEventListener('focus', function() {
+      const query = this.value.trim();
+      
+      if (query.length < 2) {
+        // Show recent searches and popular items
+        displayRecentSearches();
+        if (popularSection) popularSection.style.display = 'block';
+        if (searchResults) searchResults.style.display = 'none';
+      }
+      
+      searchDropdown.style.display = 'block';
+    });
 
-      // Handle escape key
-      searchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          searchResults.style.display = 'none';
-          searchInput.blur();
-        }
+    // Handle search input
+    searchInput.addEventListener('input', function(e) {
+      clearTimeout(searchTimeout);
+      const query = e.target.value.trim();
+
+      if (query.length < 2) {
+        // Show recent searches and popular items
+        displayRecentSearches();
+        if (popularSection) popularSection.style.display = 'block';
+        if (searchResults) searchResults.style.display = 'none';
+        return;
+      }
+
+      // Hide recent and popular, show loading or perform search
+      if (recentSection) recentSection.style.display = 'none';
+      if (popularSection) popularSection.style.display = 'none';
+      
+      // Debounce search
+      searchTimeout = setTimeout(() => {
+        performPredictiveSearch(query);
+      }, 300);
+    });
+
+    // Handle form submit
+    searchForm.addEventListener('submit', function(e) {
+      const query = searchInput.value.trim();
+      if (query) {
+        saveRecentSearch(query);
+      }
+    });
+
+    // Handle recent search click
+    document.addEventListener('click', function(e) {
+      const recentLink = e.target.closest('[data-search-term]');
+      if (recentLink) {
+        e.preventDefault();
+        const searchTerm = recentLink.dataset.searchTerm;
+        searchInput.value = searchTerm;
+        searchForm.submit();
+      }
+    });
+
+    // Clear recent searches
+    if (clearRecentBtn) {
+      clearRecentBtn.addEventListener('click', function() {
+        localStorage.removeItem(RECENT_SEARCHES_KEY);
+        recentSection.style.display = 'none';
       });
     }
+
+    // Close button
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
+        searchDropdown.style.display = 'none';
+        searchInput.blur();
+      });
+    }
+
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.bunnings-search__wrapper')) {
+        searchDropdown.style.display = 'none';
+      }
+    });
+
+    // Handle escape key
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        searchDropdown.style.display = 'none';
+        searchInput.blur();
+      }
+    });
 
     // Predictive search function
     function performPredictiveSearch(query) {
@@ -482,7 +821,7 @@
 
     // Display search results
     function displaySearchResults(data) {
-      const resultsContainer = document.querySelector('.bunnings-search__results-inner');
+      if (!searchResults) return;
       
       if (!data.resources || !data.resources.results) {
         searchResults.style.display = 'none';
@@ -534,7 +873,7 @@
       }
 
       if (html) {
-        resultsContainer.innerHTML = html;
+        searchResults.innerHTML = html;
         searchResults.style.display = 'block';
       } else {
         searchResults.style.display = 'none';
@@ -725,6 +1064,34 @@
       "type": "text",
       "id": "popular_search_5",
       "label": "Popular search 5"
+    },
+    {
+      "type": "header",
+      "content": "Popular Products"
+    },
+    {
+      "type": "paragraph",
+      "content": "Select products to show in the 'Popular right now' section when the search is focused."
+    },
+    {
+      "type": "product",
+      "id": "popular_product_1",
+      "label": "Popular product 1"
+    },
+    {
+      "type": "product",
+      "id": "popular_product_2",
+      "label": "Popular product 2"
+    },
+    {
+      "type": "product",
+      "id": "popular_product_3",
+      "label": "Popular product 3"
+    },
+    {
+      "type": "product",
+      "id": "popular_product_4",
+      "label": "Popular product 4"
     },
     {
       "type": "header",
