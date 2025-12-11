@@ -123,7 +123,7 @@
             "background_image": "shopify://shop_images/Flybuys-2.webp",
             "heading": "Redeem flybuys points in store",
             "link_text": "Find out more",
-            "link": "",
+            "link": "shopify://pages/contact",
             "overlay_background": "#0066cc",
             "overlay_text_color": "#ffffff"
           }
