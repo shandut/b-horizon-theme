@@ -50,7 +50,7 @@
         "popular_search_5": "",
         "popular_product_1": "craftright-300mm-2-piece-quick-action-clamp",
         "popular_product_2": "craftright-820mm-pick-up-tool",
-        "popular_product_3": "",
+        "popular_product_3": "masport-470-2in1-petrol-lawnmower",
         "popular_product_4": "",
         "show_lists": true,
         "lists_text": "Lists",
@@ -61,7 +61,12 @@
         "search_background": "#ffffff",
         "search_text_color": "#333333",
         "search_border_color": "rgba(0,0,0,0)",
-        "header_height": 80
+        "section_width": "page-width",
+        "header_height": 80,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "border_width": 0,
+        "border_color": "#e0e0e0"
       }
     },
     "header_announcements_9jGBFp": {
