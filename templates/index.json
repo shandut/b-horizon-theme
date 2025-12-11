@@ -111,7 +111,7 @@
           "type": "product_card",
           "settings": {
             "product": "ryobi-18v-one-4-0ah-33cm-cordless-lawn-mower-kit-rlm18x33s40",
-            "custom_text": "Don't miss this JVC 55\" 4K QLED Smart TV",
+            "custom_text": "Don't miss this {{ block.settings.product.title }}",
             "show_arrows": true,
             "card_background": "#0d5257",
             "card_text_color": ""
