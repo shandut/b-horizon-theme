@@ -14,11 +14,13 @@
   id="{{ section_id }}"
   class="promo-grid section section--{{ section.settings.section_width }}"
   style="
+    --promo-section-bg: {{ section.settings.section_background }};
     --promo-bg-color: {{ section.settings.background_color }};
     --promo-text-color: {{ section.settings.text_color }};
     --promo-button-bg: {{ section.settings.button_background }};
     --promo-button-text: {{ section.settings.button_text_color }};
     --promo-accent-color: {{ section.settings.accent_color }};
+    --promo-card-radius: {{ section.settings.card_border_radius }}px;
     --promo-padding-top: {{ section.settings.padding_top }}px;
     --promo-padding-bottom: {{ section.settings.padding_bottom }}px;
   "
@@ -170,6 +172,7 @@
   #{{ section_id }} {
     padding-top: var(--promo-padding-top);
     padding-bottom: var(--promo-padding-bottom);
+    background-color: var(--promo-section-bg);
   }
 
   .promo-grid__container {
@@ -187,7 +190,7 @@
 
   /* Base card styles */
   .promo-grid__card {
-    border-radius: 12px;
+    border-radius: var(--promo-card-radius, 16px);
     overflow: hidden;
     position: relative;
   }
@@ -484,6 +487,12 @@
     },
     {
       "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
       "id": "background_color",
       "label": "Default card background",
       "default": "#006b6b"
@@ -515,6 +524,16 @@
     {
       "type": "header",
       "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
     },
     {
       "type": "range",
