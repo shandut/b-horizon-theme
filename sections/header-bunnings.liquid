@@ -9,8 +9,8 @@
 -%}
 
 <header 
-  id="{{ header_id }}"
-  class="bunnings-header"
+  id="{{ header_id }}" 
+  class="bunnings-header bunnings-header--{{ section.settings.section_width | default: 'page-width' }}"
   data-section-id="{{ section.id }}"
   style="
     --header-bg-color: {{ section.settings.background_color }};
@@ -21,6 +21,10 @@
     --search-border-color: {{ section.settings.search_border_color }};
     --header-height: {{ section.settings.header_height }}px;
     --logo-width: {{ section.settings.logo_width }}px;
+    --header-padding-top: {{ section.settings.padding_top }}px;
+    --header-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --header-border-width: {{ section.settings.border_width }}px;
+    --header-border-color: {{ section.settings.border_color }};
   "
 >
   <div class="bunnings-header__container">
@@ -263,16 +267,46 @@
     top: 0;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding-top: var(--header-padding-top, 0);
+    padding-bottom: var(--header-padding-bottom, 0);
+    border-bottom: var(--header-border-width, 0) solid var(--header-border-color, transparent);
   }
 
   .bunnings-header__container {
-    max-width: 1400px;
-    margin: 0 auto;
     display: flex;
     align-items: center;
     gap: 2rem;
-    padding: 0 1rem;
     height: var(--header-height);
+  }
+
+  /* Page width container - default */
+  .bunnings-header--page-width .bunnings-header__container {
+    max-width: min(var(--page-width, 1400px), 100%);
+    margin: 0 auto;
+    padding: 0 max(1rem, calc((100vw - var(--page-width, 1400px)) / 2));
+  }
+
+  /* Full width container */
+  .bunnings-header--full-width .bunnings-header__container {
+    width: 100%;
+    padding: 0 2rem;
+    max-width: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .bunnings-header--page-width .bunnings-header__container {
+      padding: 0 2rem;
+    }
+    
+    .bunnings-header--full-width .bunnings-header__container {
+      padding: 0 4rem;
+    }
+  }
+
+  @media screen and (min-width: 1400px) {
+    .bunnings-header--full-width .bunnings-header__container {
+      padding: 0 5rem;
+    }
   }
 
   /* Logo Section */
@@ -1159,6 +1193,22 @@
       "content": "Layout"
     },
     {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
       "type": "range",
       "id": "header_height",
       "label": "Header height",
@@ -1167,6 +1217,42 @@
       "step": 10,
       "default": 80,
       "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "Border bottom width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e0e0e0"
     }
   ],
   "presets": [
