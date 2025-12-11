@@ -275,8 +275,9 @@
   .bunnings-header__container {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    justify-content: space-between;
     height: var(--header-height);
+    gap: 2rem;
   }
 
   /* Page width container - default */
@@ -311,7 +312,9 @@
 
   /* Logo Section */
   .bunnings-header__logo {
-    flex-shrink: 0;
+    flex: 1 1 0;
+    display: flex;
+    justify-content: flex-start;
   }
 
   .bunnings-header__logo-link {
@@ -335,16 +338,23 @@
 
   /* Search Section */
   .bunnings-header__search {
-    flex-grow: 1;
+    flex: 2 1 0;
     max-width: 600px;
+    display: flex;
+    justify-content: center;
   }
 
   .bunnings-search-form {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .bunnings-search__wrapper {
     position: relative;
+    width: 100%;
+    max-width: 600px;
   }
 
   .bunnings-search__input-wrapper {
@@ -594,10 +604,11 @@
 
   /* Account & Cart Section */
   .bunnings-header__actions {
+    flex: 1 1 0;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 1.5rem;
-    flex-shrink: 0;
   }
 
   .bunnings-header__action-link {
@@ -656,10 +667,15 @@
 
     .bunnings-header__logo {
       --logo-width: 120px;
+      flex: 0 0 auto;
     }
 
     .bunnings-header__search {
       display: none; /* Hide search on mobile - can be toggled */
+    }
+    
+    .bunnings-header__actions {
+      flex: 1 1 auto;
     }
 
     .bunnings-header__action-text {
