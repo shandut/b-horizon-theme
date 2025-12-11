@@ -87,7 +87,13 @@ span.money,
 .cart-total__price,
 .order-summary__price,
 .checkout__price,
-.line-item__price {
+.line-item__price,
+/* Horizon theme cart page specific */
+.cart-items__price,
+.cart__total-value,
+.cart__original-total-value,
+.cart__discount-value,
+.cart-secondary-typography {
   font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
   font-weight: 700;
 }
