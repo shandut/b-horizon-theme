@@ -101,7 +101,7 @@
             "button_label": "View catalogue",
             "button_link": "shopify://pages/contact",
             "image": "shopify://shop_images/Xmas_CatAmp_Bento_AU_640x640_699e3fad-01c6-4593-b767-a8bed7c7111b.webp",
-            "card_background": "rgba(0,0,0,0)",
+            "card_background": "#0d5257",
             "card_text_color": "",
             "button_bg": "",
             "button_text": ""
@@ -113,7 +113,7 @@
             "product": "ryobi-18v-one-4-0ah-33cm-cordless-lawn-mower-kit-rlm18x33s40",
             "custom_text": "Don't miss this JVC 55\" 4K QLED Smart TV",
             "show_arrows": true,
-            "card_background": "",
+            "card_background": "#0d5257",
             "card_text_color": ""
           }
         },
