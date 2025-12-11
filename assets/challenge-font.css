@@ -93,7 +93,8 @@ span.money,
 .cart__total-value,
 .cart__original-total-value,
 .cart__discount-value,
-.cart-secondary-typography {
+.cart-secondary-typography,
+.cart-items__price-unit {
   font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
   font-weight: 700;
 }
@@ -142,4 +143,45 @@ span.money,
 /* Override any inline styles for prices */
 [style*="font-family"]:is(.price, .money, [class*="price"]) {
   font-family: 'Challenge Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+/* ============================================
+   BRAND COLORS - Cart Checkout Button
+   ============================================ */
+
+/* Cart page checkout button - Bunnings brand red */
+.cart__checkout-button,
+.cart__ctas .cart__checkout-button {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.cart__checkout-button:hover,
+.cart__ctas .cart__checkout-button:hover {
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
+  color: #ffffff !important;
+}
+
+.cart__checkout-button:focus,
+.cart__ctas .cart__checkout-button:focus {
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
+  outline: 2px solid #dc2626 !important;
+  outline-offset: 2px !important;
+}
+
+/* Cart drawer checkout button */
+.cart-drawer__checkout-button,
+.drawer__footer .button--primary {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.cart-drawer__checkout-button:hover,
+.drawer__footer .button--primary:hover {
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
 }
