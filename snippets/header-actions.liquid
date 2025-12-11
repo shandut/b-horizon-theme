@@ -1,7 +1,12 @@
 {% liquid
   # Default to showing both icons if not specified
-  assign show_account = show_account | default: true
-  assign show_cart = show_cart | default: true
+  # Using nil check since default filter treats false as "use default"
+  if show_account == nil
+    assign show_account = true
+  endif
+  if show_cart == nil
+    assign show_cart = true
+  endif
 %}
 
 <script
