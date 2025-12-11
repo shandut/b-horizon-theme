@@ -1,43 +1,46 @@
 {% comment %}
-  Product Image Slider Section
+  Product Image Slider Block
   Displays product images in a slider with thumbnails, navigation arrows, counter, and magnify zoom.
-  This is a standalone section that can be added to the product template.
+  Use this block as an alternative to Product media within the Product Information section.
 {% endcomment %}
 
+{% assign block_settings = block.settings %}
+
 {%- liquid
-  assign section_id = 'ProductImageSlider-' | append: section.id
-  assign current_product = product | default: closest.product
-  assign media_count = current_product.media.size
+  assign block_id = 'ProductImageSlider-' | append: block.id
+  assign selected_product = closest.product
+  assign media_count = selected_product.media.size
   assign has_multiple_images = false
   if media_count > 1
     assign has_multiple_images = true
   endif
 -%}
 
-{%- if current_product.media.size > 0 -%}
+{%- if selected_product.media.size > 0 -%}
   <div
-    id="{{ section_id }}"
-    class="product-image-slider section section--{{ section.settings.section_width }}"
+    id="{{ block_id }}"
+    class="product-image-slider"
     style="
-      --slider-gap: {{ section.settings.thumbnail_gap }}px;
-      --thumbnail-size: {{ section.settings.thumbnail_size }}px;
-      --main-image-radius: {{ section.settings.image_radius }}px;
-      --arrow-bg-color: {{ section.settings.arrow_background }};
-      --arrow-color: {{ section.settings.arrow_color }};
-      {% render 'spacing-style', settings: section.settings %}
+      --slider-gap: {{ block_settings.thumbnail_gap }}px;
+      --thumbnail-size: {{ block_settings.thumbnail_size }}px;
+      --main-image-radius: {{ block_settings.image_radius }}px;
+      --arrow-bg-color: {{ block_settings.arrow_background }};
+      --arrow-color: {{ block_settings.arrow_color }};
+      {% render 'spacing-style', settings: block_settings %}
     "
-    data-section-id="{{ section.id }}"
+    data-block-id="{{ block.id }}"
     data-media-count="{{ media_count }}"
+    {{ block.shopify_attributes }}
   >
-    <div class="product-image-slider__container page-width">
+    <div class="product-image-slider__container">
       {%- comment -%} Main Image Area {%- endcomment -%}
       <div class="product-image-slider__main">
         {%- comment -%} Navigation Arrows {%- endcomment -%}
-        {%- if has_multiple_images and section.settings.show_arrows -%}
+        {%- if has_multiple_images and block_settings.show_arrows -%}
           <button
             type="button"
             class="product-image-slider__arrow product-image-slider__arrow--prev"
-            aria-label="Previous image"
+            aria-label="{{ 'accessibility.previous_slide' | t | default: 'Previous image' }}"
             data-slider-prev
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -47,7 +50,7 @@
           <button
             type="button"
             class="product-image-slider__arrow product-image-slider__arrow--next"
-            aria-label="Next image"
+            aria-label="{{ 'accessibility.next_slide' | t | default: 'Next image' }}"
             data-slider-next
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -58,7 +61,7 @@
 
         {%- comment -%} Main Image Container {%- endcomment -%}
         <div class="product-image-slider__main-images" data-main-images>
-          {%- for media in current_product.media -%}
+          {%- for media in selected_product.media -%}
             <div
               class="product-image-slider__slide{% if forloop.first %} product-image-slider__slide--active{% endif %}"
               data-slide-index="{{ forloop.index0 }}"
@@ -71,10 +74,10 @@
                     loading: 'lazy',
                     widths: '375, 550, 750, 1100, 1500',
                     sizes: '(min-width: 750px) 50vw, 100vw',
-                    alt: media.alt | default: current_product.title
+                    alt: media.alt | default: selected_product.title
                   }}
                   
-                  {%- if section.settings.enable_zoom -%}
+                  {%- if block_settings.enable_zoom -%}
                     <div class="product-image-slider__zoom-lens" data-zoom-lens aria-hidden="true"></div>
                     <div class="product-image-slider__zoom-result" data-zoom-result aria-hidden="true">
                       <img
@@ -89,7 +92,7 @@
                 </div>
               {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
                 <div class="product-image-slider__video-wrapper">
-                  {{ media | video_tag: autoplay: false, loop: section.settings.video_loop, controls: true, muted: false }}
+                  {{ media | video_tag: autoplay: false, loop: block_settings.video_loop, controls: true, muted: false }}
                 </div>
               {%- elsif media.media_type == 'model' -%}
                 <div class="product-image-slider__model-wrapper">
@@ -101,11 +104,11 @@
         </div>
 
         {%- comment -%} Magnify Button {%- endcomment -%}
-        {%- if section.settings.enable_zoom and section.settings.show_zoom_button -%}
+        {%- if block_settings.enable_zoom and block_settings.show_zoom_button -%}
           <button
             type="button"
             class="product-image-slider__zoom-toggle"
-            aria-label="Toggle zoom"
+            aria-label="{{ 'actions.zoom' | t | default: 'Toggle zoom' }}"
             data-zoom-toggle
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -122,7 +125,7 @@
       {%- if has_multiple_images -%}
         <div class="product-image-slider__controls">
           {%- comment -%} Counter {%- endcomment -%}
-          {%- if section.settings.show_counter -%}
+          {%- if block_settings.show_counter -%}
             <div class="product-image-slider__counter" aria-live="polite" aria-atomic="true">
               <span class="product-image-slider__counter-current" data-counter-current>1</span>
               <span class="product-image-slider__counter-separator">/</span>
@@ -131,25 +134,25 @@
           {%- endif -%}
 
           {%- comment -%} Thumbnails {%- endcomment -%}
-          {%- if section.settings.show_thumbnails -%}
+          {%- if block_settings.show_thumbnails -%}
             <div class="product-image-slider__thumbnails-wrapper">
-              <div class="product-image-slider__thumbnails" data-thumbnails role="tablist" aria-label="Product images">
-                {%- for media in current_product.media limit: section.settings.max_thumbnails -%}
+              <div class="product-image-slider__thumbnails" data-thumbnails role="tablist" aria-label="{{ 'products.product.media.gallery_viewer' | t | default: 'Product images' }}">
+                {%- for media in selected_product.media limit: block_settings.max_thumbnails -%}
                   <button
                     type="button"
                     class="product-image-slider__thumbnail{% if forloop.first %} product-image-slider__thumbnail--active{% endif %}"
                     data-thumbnail-index="{{ forloop.index0 }}"
                     role="tab"
                     aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
-                    aria-label="View image {{ forloop.index }} of {{ media_count }}"
+                    aria-label="{{ 'products.product.media.load_image' | t: index: forloop.index | default: 'View image ' | append: forloop.index | append: ' of ' | append: media_count }}"
                     tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
                   >
                     {%- if media.media_type == 'image' -%}
                       {{ media | image_url: width: 150 | image_tag:
                         class: 'product-image-slider__thumbnail-image',
                         loading: 'lazy',
-                        width: section.settings.thumbnail_size,
-                        height: section.settings.thumbnail_size,
+                        width: block_settings.thumbnail_size,
+                        height: block_settings.thumbnail_size,
                         alt: ''
                       }}
                     {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
@@ -157,8 +160,8 @@
                         {{ media.preview_image | image_url: width: 150 | image_tag:
                           class: 'product-image-slider__thumbnail-image',
                           loading: 'lazy',
-                          width: section.settings.thumbnail_size,
-                          height: section.settings.thumbnail_size,
+                          width: block_settings.thumbnail_size,
+                          height: block_settings.thumbnail_size,
                           alt: ''
                         }}
                         <span class="product-image-slider__thumbnail-play" aria-hidden="true">
@@ -172,8 +175,8 @@
                         {{ media.preview_image | image_url: width: 150 | image_tag:
                           class: 'product-image-slider__thumbnail-image',
                           loading: 'lazy',
-                          width: section.settings.thumbnail_size,
-                          height: section.settings.thumbnail_size,
+                          width: block_settings.thumbnail_size,
+                          height: block_settings.thumbnail_size,
                           alt: ''
                         }}
                         <span class="product-image-slider__thumbnail-3d-icon" aria-hidden="true">3D</span>
@@ -182,14 +185,14 @@
                   </button>
                 {%- endfor -%}
 
-                {%- if media_count > section.settings.max_thumbnails -%}
+                {%- if media_count > block_settings.max_thumbnails -%}
                   <button
                     type="button"
                     class="product-image-slider__thumbnail product-image-slider__thumbnail--more"
                     data-thumbnail-more
-                    aria-label="View all {{ media_count }} images"
+                    aria-label="{{ 'products.product.media.load_all_images' | t: count: media_count | default: 'View all ' | append: media_count | append: ' images' }}"
                   >
-                    <span>+{{ media_count | minus: section.settings.max_thumbnails }}</span>
+                    <span>+{{ media_count | minus: block_settings.max_thumbnails }}</span>
                   </button>
                 {%- endif -%}
               </div>
@@ -199,354 +202,380 @@
       {%- endif -%}
     </div>
   </div>
+{%- else -%}
+  <div class="product-image-slider product-image-slider--empty" {{ block.shopify_attributes }}>
+    <div class="product-image-slider__placeholder">
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+  </div>
+{%- endif -%}
 
-  <style>
-    .product-image-slider {
-      width: 100%;
-    }
+{% stylesheet %}
+  .product-image-slider {
+    width: 100%;
+  }
 
-    .product-image-slider__container {
-      max-width: var(--page-width);
-      margin: 0 auto;
-    }
+  .product-image-slider__container {
+    width: 100%;
+  }
 
-    .product-image-slider__main {
-      position: relative;
-      background-color: var(--color-background, #f5f5f5);
-      border-radius: var(--main-image-radius, 0);
-      overflow: hidden;
-    }
+  .product-image-slider__main {
+    position: relative;
+    background-color: var(--color-background, #f5f5f5);
+    border-radius: var(--main-image-radius, 0);
+    overflow: hidden;
+  }
 
-    .product-image-slider__main-images {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-    }
+  .product-image-slider__main-images {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
 
-    .product-image-slider__slide {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  .product-image-slider__slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    .product-image-slider__slide[hidden] {
-      display: none;
-    }
+  .product-image-slider__slide[hidden] {
+    display: none;
+  }
 
-    .product-image-slider__image-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: crosshair;
-    }
+  .product-image-slider__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: crosshair;
+  }
 
-    .product-image-slider__image {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-    }
+  .product-image-slider__image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
 
-    /* Navigation Arrows */
+  /* Navigation Arrows */
+  .product-image-slider__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--arrow-color, #333);
+    background: var(--arrow-bg-color, rgba(255, 255, 255, 0.9));
+    color: var(--arrow-color, #333);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .product-image-slider__arrow:hover {
+    background: var(--arrow-color, #333);
+    color: var(--arrow-bg-color, #fff);
+  }
+
+  .product-image-slider__arrow:focus-visible {
+    outline: 2px solid var(--color-focus, #0d5257);
+    outline-offset: 2px;
+  }
+
+  .product-image-slider__arrow--prev {
+    left: 1rem;
+  }
+
+  .product-image-slider__arrow--next {
+    right: 1rem;
+  }
+
+  /* Zoom Toggle Button */
+  .product-image-slider__zoom-toggle {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .product-image-slider__zoom-toggle:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  .product-image-slider__zoom-toggle:focus-visible {
+    outline: 2px solid var(--color-focus, #0d5257);
+    outline-offset: 2px;
+  }
+
+  /* Zoom Lens and Result */
+  .product-image-slider__zoom-lens {
+    display: none;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .product-image-slider__zoom-result {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vh;
+    max-width: 1000px;
+    max-height: 800px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    z-index: 1000;
+  }
+
+  .product-image-slider__zoom-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Zoom active states */
+  .product-image-slider__main.zoom-active .product-image-slider__zoom-result {
+    display: block;
+  }
+
+  .product-image-slider__main.zoom-active::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  /* Controls Row */
+  .product-image-slider__controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  /* Counter */
+  .product-image-slider__counter {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-foreground-subdued, #666);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .product-image-slider__counter-current {
+    font-weight: 700;
+    color: var(--color-foreground, #000);
+  }
+
+  /* Thumbnails */
+  .product-image-slider__thumbnails-wrapper {
+    flex: 1;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .product-image-slider__thumbnails-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-image-slider__thumbnails {
+    display: flex;
+    gap: var(--slider-gap, 8px);
+  }
+
+  .product-image-slider__thumbnail {
+    flex-shrink: 0;
+    width: var(--thumbnail-size, 80px);
+    height: var(--thumbnail-size, 80px);
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 0;
+    background: #fff;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .product-image-slider__thumbnail:hover {
+    border-color: var(--color-border-hover, #999);
+  }
+
+  .product-image-slider__thumbnail--active {
+    border-color: var(--color-foreground, #0d5257);
+  }
+
+  .product-image-slider__thumbnail:focus-visible {
+    outline: 2px solid var(--color-focus, #0d5257);
+    outline-offset: 2px;
+  }
+
+  .product-image-slider__thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-image-slider__thumbnail-video,
+  .product-image-slider__thumbnail-3d {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-image-slider__thumbnail-play,
+  .product-image-slider__thumbnail-3d-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .product-image-slider__thumbnail--more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    font-weight: 600;
+    color: #333;
+  }
+
+  /* Video and Model Wrappers */
+  .product-image-slider__video-wrapper,
+  .product-image-slider__model-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-image-slider__video-wrapper video,
+  .product-image-slider__video-wrapper iframe {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Placeholder */
+  .product-image-slider--empty {
+    background: #f5f5f5;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-image-slider__placeholder {
+    width: 50%;
+    max-width: 200px;
+    color: #ccc;
+  }
+
+  .product-image-slider__placeholder svg {
+    width: 100%;
+    height: auto;
+  }
+
+  /* Mobile Responsive */
+  @media screen and (max-width: 749px) {
     .product-image-slider__arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid var(--arrow-color, #333);
-      background: var(--arrow-bg-color, rgba(255, 255, 255, 0.9));
-      color: var(--arrow-color, #333);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-    }
-
-    .product-image-slider__arrow:hover {
-      background: var(--arrow-color, #333);
-      color: var(--arrow-bg-color, #fff);
-    }
-
-    .product-image-slider__arrow:focus-visible {
-      outline: 2px solid var(--color-focus, #0d5257);
-      outline-offset: 2px;
+      width: 40px;
+      height: 40px;
     }
 
     .product-image-slider__arrow--prev {
-      left: 1rem;
+      left: 0.5rem;
     }
 
     .product-image-slider__arrow--next {
-      right: 1rem;
+      right: 0.5rem;
     }
 
-    /* Zoom Toggle Button */
     .product-image-slider__zoom-toggle {
-      position: absolute;
-      bottom: 1rem;
-      right: 1rem;
-      z-index: 10;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid #333;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
+      width: 40px;
+      height: 40px;
+      bottom: 0.5rem;
+      right: 0.5rem;
     }
 
-    .product-image-slider__zoom-toggle:hover {
-      background: #333;
-      color: #fff;
-    }
-
-    .product-image-slider__zoom-toggle:focus-visible {
-      outline: 2px solid var(--color-focus, #0d5257);
-      outline-offset: 2px;
-    }
-
-    /* Zoom Lens and Result */
-    .product-image-slider__zoom-lens {
-      display: none;
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      background: rgba(255, 255, 255, 0.4);
-      border: 2px solid rgba(0, 0, 0, 0.3);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .product-image-slider__zoom-result {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80vw;
-      height: 80vh;
-      max-width: 1000px;
-      max-height: 800px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-      z-index: 1000;
-    }
-
-    .product-image-slider__zoom-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    /* Zoom active states */
-    .product-image-slider__main.zoom-active .product-image-slider__zoom-result {
-      display: block;
-    }
-
-    .product-image-slider__main.zoom-active::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    }
-
-    /* Controls Row */
     .product-image-slider__controls {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
-    /* Counter */
-    .product-image-slider__counter {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--color-foreground-subdued, #666);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .product-image-slider__counter-current {
-      font-weight: 700;
-      color: var(--color-foreground, #000);
-    }
-
-    /* Thumbnails */
-    .product-image-slider__thumbnails-wrapper {
-      flex: 1;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-
-    .product-image-slider__thumbnails-wrapper::-webkit-scrollbar {
-      display: none;
-    }
-
-    .product-image-slider__thumbnails {
-      display: flex;
-      gap: var(--slider-gap, 8px);
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
     }
 
     .product-image-slider__thumbnail {
-      flex-shrink: 0;
-      width: var(--thumbnail-size, 80px);
-      height: var(--thumbnail-size, 80px);
-      border: 2px solid transparent;
-      border-radius: 4px;
-      padding: 0;
-      background: #fff;
-      cursor: pointer;
-      overflow: hidden;
-      transition: border-color 0.2s ease;
+      width: 60px;
+      height: 60px;
     }
 
-    .product-image-slider__thumbnail:hover {
-      border-color: var(--color-border-hover, #999);
+    .product-image-slider__zoom-result {
+      width: 95vw;
+      height: 70vh;
     }
+  }
+{% endstylesheet %}
 
-    .product-image-slider__thumbnail--active {
-      border-color: var(--color-foreground, #0d5257);
-    }
-
-    .product-image-slider__thumbnail:focus-visible {
-      outline: 2px solid var(--color-focus, #0d5257);
-      outline-offset: 2px;
-    }
-
-    .product-image-slider__thumbnail-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-image-slider__thumbnail-video,
-    .product-image-slider__thumbnail-3d {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .product-image-slider__thumbnail-play,
-    .product-image-slider__thumbnail-3d-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .product-image-slider__thumbnail--more {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f5f5f5;
-      font-weight: 600;
-      color: #333;
-    }
-
-    /* Video and Model Wrappers */
-    .product-image-slider__video-wrapper,
-    .product-image-slider__model-wrapper {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .product-image-slider__video-wrapper video,
-    .product-image-slider__video-wrapper iframe {
-      max-width: 100%;
-      max-height: 100%;
-    }
-
-    /* Mobile Responsive */
-    @media screen and (max-width: 749px) {
-      .product-image-slider__arrow {
-        width: 40px;
-        height: 40px;
-      }
-
-      .product-image-slider__arrow--prev {
-        left: 0.5rem;
-      }
-
-      .product-image-slider__arrow--next {
-        right: 0.5rem;
-      }
-
-      .product-image-slider__zoom-toggle {
-        width: 40px;
-        height: 40px;
-        bottom: 0.5rem;
-        right: 0.5rem;
-      }
-
-      .product-image-slider__controls {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-      }
-
-      .product-image-slider__thumbnail {
-        width: 60px;
-        height: 60px;
-      }
-
-      .product-image-slider__zoom-result {
-        width: 95vw;
-        height: 70vh;
-      }
-    }
-  </style>
-
-  <script>
-    (function() {
-      const sliderSection = document.getElementById('{{ section_id }}');
-      if (!sliderSection) return;
-
-      const mediaCount = parseInt(sliderSection.dataset.mediaCount) || 0;
+{% javascript %}
+  (function() {
+    const sliderBlocks = document.querySelectorAll('[data-block-id].product-image-slider');
+    
+    sliderBlocks.forEach(sliderBlock => {
+      const mediaCount = parseInt(sliderBlock.dataset.mediaCount) || 0;
       if (mediaCount === 0) return;
 
       let currentIndex = 0;
 
       // Elements
-      const slides = sliderSection.querySelectorAll('[data-slide-index]');
-      const thumbnails = sliderSection.querySelectorAll('[data-thumbnail-index]');
-      const prevBtn = sliderSection.querySelector('[data-slider-prev]');
-      const nextBtn = sliderSection.querySelector('[data-slider-next]');
-      const counterCurrent = sliderSection.querySelector('[data-counter-current]');
-      const zoomToggle = sliderSection.querySelector('[data-zoom-toggle]');
-      const mainArea = sliderSection.querySelector('.product-image-slider__main');
+      const slides = sliderBlock.querySelectorAll('[data-slide-index]');
+      const thumbnails = sliderBlock.querySelectorAll('[data-thumbnail-index]');
+      const prevBtn = sliderBlock.querySelector('[data-slider-prev]');
+      const nextBtn = sliderBlock.querySelector('[data-slider-next]');
+      const counterCurrent = sliderBlock.querySelector('[data-counter-current]');
+      const zoomToggle = sliderBlock.querySelector('[data-zoom-toggle]');
+      const mainArea = sliderBlock.querySelector('.product-image-slider__main');
 
       // Go to slide
       function goToSlide(index) {
@@ -560,7 +589,7 @@
         });
 
         // Show target slide
-        const targetSlide = sliderSection.querySelector(`[data-slide-index="${index}"]`);
+        const targetSlide = sliderBlock.querySelector(`[data-slide-index="${index}"]`);
         if (targetSlide) {
           targetSlide.hidden = false;
           targetSlide.classList.add('product-image-slider__slide--active');
@@ -614,7 +643,7 @@
       });
 
       // Keyboard navigation for slider
-      sliderSection.addEventListener('keydown', (e) => {
+      sliderBlock.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') {
           goToSlide(currentIndex - 1);
         } else if (e.key === 'ArrowRight') {
@@ -626,7 +655,7 @@
       let touchStartX = 0;
       let touchEndX = 0;
 
-      const mainImages = sliderSection.querySelector('[data-main-images]');
+      const mainImages = sliderBlock.querySelector('[data-main-images]');
       if (mainImages) {
         mainImages.addEventListener('touchstart', (e) => {
           touchStartX = e.changedTouches[0].screenX;
@@ -683,7 +712,7 @@
       }
 
       // Hover zoom (lens effect)
-      const imageWrappers = sliderSection.querySelectorAll('[data-zoom-container]');
+      const imageWrappers = sliderBlock.querySelectorAll('[data-zoom-container]');
       imageWrappers.forEach(wrapper => {
         const lens = wrapper.querySelector('[data-zoom-lens]');
         const img = wrapper.querySelector('.product-image-slider__image');
@@ -704,49 +733,23 @@
           lens.style.display = 'none';
         });
       });
-    })();
-  </script>
-{%- else -%}
-  <div class="product-image-slider product-image-slider--empty">
-    <div class="product-image-slider__placeholder">
-      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-    </div>
-  </div>
-{%- endif -%}
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
-  "name": "Product Image Slider",
-  "tag": "section",
-  "class": "section-product-image-slider",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
+  "name": "t:names.product_image_slider",
+  "tag": null,
   "settings": [
     {
       "type": "header",
-      "content": "Layout"
-    },
-    {
-      "type": "select",
-      "id": "section_width",
-      "label": "Section width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "Page width"
-        },
-        {
-          "value": "full-width",
-          "label": "Full width"
-        }
-      ],
-      "default": "page-width"
+      "content": "t:content.layout"
     },
     {
       "type": "range",
       "id": "image_radius",
-      "label": "Image corner radius",
+      "label": "t:settings.border_radius",
       "min": 0,
       "max": 20,
       "step": 2,
@@ -755,46 +758,46 @@
     },
     {
       "type": "header",
-      "content": "Navigation"
+      "content": "t:content.navigation"
     },
     {
       "type": "checkbox",
       "id": "show_arrows",
-      "label": "Show navigation arrows",
+      "label": "t:settings.show_navigation_arrows",
       "default": true
     },
     {
       "type": "color",
       "id": "arrow_background",
-      "label": "Arrow background",
+      "label": "t:settings.arrow_background",
       "default": "rgba(255, 255, 255, 0.9)"
     },
     {
       "type": "color",
       "id": "arrow_color",
-      "label": "Arrow color",
+      "label": "t:settings.arrow_color",
       "default": "#333333"
     },
     {
       "type": "header",
-      "content": "Thumbnails"
+      "content": "t:content.thumbnails"
     },
     {
       "type": "checkbox",
       "id": "show_thumbnails",
-      "label": "Show thumbnails",
+      "label": "t:settings.show_thumbnails",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "show_counter",
-      "label": "Show image counter",
+      "label": "t:settings.show_image_counter",
       "default": true
     },
     {
       "type": "range",
       "id": "thumbnail_size",
-      "label": "Thumbnail size",
+      "label": "t:settings.thumbnail_size",
       "min": 50,
       "max": 120,
       "step": 10,
@@ -804,7 +807,7 @@
     {
       "type": "range",
       "id": "thumbnail_gap",
-      "label": "Thumbnail gap",
+      "label": "t:settings.gap",
       "min": 4,
       "max": 16,
       "step": 2,
@@ -814,77 +817,68 @@
     {
       "type": "range",
       "id": "max_thumbnails",
-      "label": "Maximum visible thumbnails",
+      "label": "t:settings.max_visible_thumbnails",
       "min": 3,
       "max": 10,
       "step": 1,
       "default": 5,
-      "info": "Additional images will show as '+X'"
+      "info": "t:info.additional_images_will_show_as_plus_x"
     },
     {
       "type": "header",
-      "content": "Zoom"
+      "content": "t:content.zoom"
     },
     {
       "type": "checkbox",
       "id": "enable_zoom",
-      "label": "Enable zoom",
+      "label": "t:settings.enable_zoom",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "show_zoom_button",
-      "label": "Show zoom button",
+      "label": "t:settings.show_zoom_button",
       "default": true,
-      "info": "Magnifying glass button in corner"
+      "info": "t:info.magnifying_glass_button_in_corner"
     },
     {
       "type": "header",
-      "content": "Video"
+      "content": "t:content.video"
     },
     {
       "type": "checkbox",
       "id": "video_loop",
-      "label": "Loop videos",
+      "label": "t:settings.enable_video_looping",
       "default": false
     },
     {
       "type": "header",
-      "content": "Padding"
+      "content": "t:content.padding"
     },
     {
       "type": "range",
       "id": "padding-block-start",
-      "label": "Top",
+      "label": "t:settings.top",
       "min": 0,
       "max": 100,
-      "step": 4,
-      "default": 20,
+      "step": 1,
+      "default": 0,
       "unit": "px"
     },
     {
       "type": "range",
       "id": "padding-block-end",
-      "label": "Bottom",
+      "label": "t:settings.bottom",
       "min": 0,
       "max": 100,
-      "step": 4,
-      "default": 20,
+      "step": 1,
+      "default": 0,
       "unit": "px"
     }
   ],
   "presets": [
     {
-      "name": "Product Image Slider",
-      "settings": {
-        "show_arrows": true,
-        "show_thumbnails": true,
-        "show_counter": true,
-        "enable_zoom": true,
-        "show_zoom_button": true,
-        "thumbnail_size": 80,
-        "max_thumbnails": 5
-      }
+      "name": "t:names.product_image_slider"
     }
   ]
 }

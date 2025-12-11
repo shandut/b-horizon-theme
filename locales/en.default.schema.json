@@ -218,7 +218,9 @@
     "video_autoplay": "Videos will be muted by default",
     "video_external": "Use a YouTube or Vimeo URL",
     "pills_usage": "Used for applied filters, discount codes, and search suggestions",
-    "media_type_info": "Features are populated from your menu links"
+    "media_type_info": "Features are populated from your menu links",
+    "additional_images_will_show_as_plus_x": "Additional images will show as +X",
+    "magnifying_glass_button_in_corner": "Magnifying glass button in corner"
   },
   "names": {
     "column": "Column",
@@ -359,6 +361,7 @@
     "product_list": "Featured collection",
     "product_list_button": "View all button",
     "product_media": "Product media",
+    "product_image_slider": "Product image slider",
     "product_price": "Price",
     "product_recommendations": "Recommended products",
     "product_review_stars": "Review stars",
@@ -406,7 +409,8 @@
     "video": "Video",
     "video_section": "Video",
     "view_all_button": "View all",
-    "pills": "Pills"
+    "pills": "Pills",
+    "zoom": "Zoom"
   },
   "options": {
     "above_carousel": "Above carousel",
@@ -725,6 +729,8 @@
     "align_baseline": "Align text baseline",
     "animation": "Animation",
     "animation_repeat": "Repeat animation",
+    "arrow_background": "Arrow background",
+    "arrow_color": "Arrow color",
     "add_discount_code": "Allow discounts in cart",
     "add_to_cart_animation": "Add to cart",
     "always_stack_buttons": "Always stack buttons",
@@ -827,6 +833,7 @@
     "enable_sticky_content": "Sticky content on desktop",
     "enable_video_looping": "Video looping",
     "enable_zoom": "Enable zoom",
+    "enable_hover_zoom": "Enable hover zoom lens",
     "equal_columns": "Equal columns",
     "error_color": "Error",
     "expand_first_group": "Expand first group",
@@ -922,6 +929,8 @@
     "media_type": "Media type",
     "media_width": "Media width",
     "menu": "Menu",
+    "main_image_radius": "Main image border radius",
+    "max_visible_thumbnails": "Max visible thumbnails",
     "minimum_height": "Minimum height",
     "mobile_card_size": "Mobile card size",
     "mobile_columns": "Mobile columns",
@@ -1051,6 +1060,11 @@
     "show_second_image_on_hover": "Show second image on hover",
     "show_swatch_label": "Text labels for swatches",
     "show_tax_info": "Tax information",
+    "show_magnify_button": "Show magnify button",
+    "show_navigation_arrows": "Show navigation arrows",
+    "show_thumbnails": "Show thumbnails",
+    "show_image_counter": "Show image counter",
+    "show_zoom_button": "Show zoom button",
     // Font size or element dimensions setting
     "size": "Size",
     "size_mobile": "Mobile size",
@@ -1084,6 +1098,8 @@
     "top": "Top",
     "top_level_size": "Top level size",
     "top_padding": "Top padding",
+    "thumbnail_size": "Thumbnail size",
+    "thumbnail_gap": "Thumbnail gap",
     "transition_to_main_product": "Product card to product page transition",
     "transparent_background": "Transparent background",
     // Label for dropdown to select type/category
