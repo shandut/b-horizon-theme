@@ -99,7 +99,9 @@ export class AddToCartComponent extends Component {
    */
   #animateFlyToCart() {
     const { addToCartButton } = this.refs;
-    const cartIcon = document.querySelector('.header-actions__cart-icon');
+    // Try to find the cart icon - check both default header and Bunnings header
+    const cartIcon = document.querySelector('.header-actions__cart-icon') 
+      || document.querySelector('.bunnings-header__cart-link');
 
     const image = this.dataset.productVariantMedia;
 
