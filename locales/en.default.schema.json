@@ -1030,6 +1030,8 @@
     "search_icon": "Search icon",
     // Setting for search bar placement in header
     "search_position": "Position",
+    "show_account_icon": "Show account icon",
+    "show_cart_icon": "Show cart icon",
     "search_row": "Row",
     "row_height": "Row height",
     "secondary_button_background": "Secondary button background",

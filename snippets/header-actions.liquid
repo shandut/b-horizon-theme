@@ -1,3 +1,9 @@
+{% liquid
+  # Default to showing both icons if not specified
+  assign show_account = show_account | default: true
+  assign show_cart = show_cart | default: true
+%}
+
 <script
   type="module"
   src="{{ 'cart-icon.js' | asset_url }}"
@@ -7,22 +13,24 @@
 <header-actions
   {{- block.shopify_attributes -}}
 >
-  {% if shop.customer_accounts_enabled %}
+  {% if shop.customer_accounts_enabled and show_account %}
     {% render 'account-popover' %}
     {% render 'account-drawer' %}
   {% endif %}
 
-  {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
-    {% render 'cart-drawer' %}
-  {% else %}
-    <a
-      href="{{ routes.cart_url }}"
-      class="header-actions__action action__cart"
-      aria-label="{{ 'accessibility.cart' | t }}"
-      aria-describedby="cart-bubble-text"
-    >
-      {% render 'cart-icon-component' %}
-    </a>
+  {% if show_cart %}
+    {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
+      {% render 'cart-drawer' %}
+    {% else %}
+      <a
+        href="{{ routes.cart_url }}"
+        class="header-actions__action action__cart"
+        aria-label="{{ 'accessibility.cart' | t }}"
+        aria-describedby="cart-bubble-text"
+      >
+        {% render 'cart-icon-component' %}
+      </a>
+    {% endif %}
   {% endif %}
 </header-actions>
 
