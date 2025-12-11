@@ -90,6 +90,50 @@
         "padding-block-end": 72
       }
     },
+    "promo_grid_bunnings": {
+      "type": "promo-grid",
+      "blocks": {
+        "feature_card_main": {
+          "type": "feature_card",
+          "settings": {
+            "heading": "NEW Christmas Gift Guide out now!",
+            "button_label": "View catalogue",
+            "button_link": ""
+          }
+        },
+        "product_card_main": {
+          "type": "product_card",
+          "settings": {
+            "custom_text": "Don't miss this JVC 55\" 4K QLED Smart TV",
+            "show_arrows": true
+          }
+        },
+        "cta_card_main": {
+          "type": "cta_card",
+          "settings": {
+            "heading": "Redeem flybuys points in store",
+            "link_text": "Find out more",
+            "link": "",
+            "overlay_background": "#0066cc",
+            "overlay_text_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "feature_card_main",
+        "product_card_main",
+        "cta_card_main"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "background_color": "#006b6b",
+        "text_color": "#ffffff",
+        "button_background": "#dc2626",
+        "button_text_color": "#ffffff",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "product_list_fa6P9H": {
       "type": "product-list",
       "blocks": {
@@ -287,6 +331,7 @@
   },
   "order": [
     "hero_jVaWmY",
+    "promo_grid_bunnings",
     "product_list_fa6P9H"
   ]
 }
