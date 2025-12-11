@@ -58,6 +58,7 @@
         "text_YLPk4p",
         "button_H9gpTf"
       ],
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
@@ -98,19 +99,28 @@
           "settings": {
             "heading": "NEW Christmas Gift Guide out now!",
             "button_label": "View catalogue",
-            "button_link": ""
+            "button_link": "shopify://pages/contact",
+            "image": "shopify://shop_images/Xmas_CatAmp_Bento_AU_640x640_699e3fad-01c6-4593-b767-a8bed7c7111b.webp",
+            "card_background": "rgba(0,0,0,0)",
+            "card_text_color": "",
+            "button_bg": "",
+            "button_text": ""
           }
         },
         "product_card_main": {
           "type": "product_card",
           "settings": {
+            "product": "ryobi-18v-one-4-0ah-33cm-cordless-lawn-mower-kit-rlm18x33s40",
             "custom_text": "Don't miss this JVC 55\" 4K QLED Smart TV",
-            "show_arrows": true
+            "show_arrows": true,
+            "card_background": "",
+            "card_text_color": ""
           }
         },
         "cta_card_main": {
           "type": "cta_card",
           "settings": {
+            "background_image": "shopify://shop_images/Flybuys-2.webp",
             "heading": "Redeem flybuys points in store",
             "link_text": "Find out more",
             "link": "",
@@ -130,6 +140,7 @@
         "text_color": "#ffffff",
         "button_background": "#dc2626",
         "button_text_color": "#ffffff",
+        "accent_color": "#ffab00",
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -175,7 +186,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
+                "text": "<h3>All {{ closest.collection.title }}</h3>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
