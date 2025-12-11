@@ -34,6 +34,32 @@
         "padding_bottom": 12
       }
     },
+    "header_bunnings_yxGRhe": {
+      "type": "header-bunnings",
+      "name": "Bunnings Header",
+      "settings": {
+        "logo_width": 150,
+        "logo_height": 60,
+        "search_placeholder": "What can we help you find today?",
+        "show_popular_searches": false,
+        "popular_searches_text": "Popular searches",
+        "popular_search_1": "",
+        "popular_search_2": "",
+        "popular_search_3": "",
+        "popular_search_4": "",
+        "popular_search_5": "",
+        "show_lists": true,
+        "lists_text": "Lists",
+        "lists_url": "",
+        "background_color": "#0d5257",
+        "text_color": "#ffffff",
+        "hover_color": "#ffffff1a",
+        "search_background": "#ffffff",
+        "search_text_color": "#333333",
+        "search_border_color": "rgba(0,0,0,0)",
+        "header_height": 80
+      }
+    },
     "header_announcements_9jGBFp": {
       "type": "header-announcements",
       "blocks": {
@@ -54,6 +80,7 @@
       "block_order": [
         "announcement_BxgCk9"
       ],
+      "disabled": true,
       "name": "t:names.announcement_bar",
       "settings": {
         "speed": 5,
@@ -69,6 +96,7 @@
       "blocks": {
         "header-logo": {
           "type": "_header-logo",
+          "disabled": true,
           "static": true,
           "settings": {
             "hide_logo_on_home_page": false,
@@ -131,33 +159,6 @@
         "product_color_scheme": "default",
         "enable_transparent_header_collection": false,
         "collection_color_scheme": "default"
-      }
-    },
-    "header_bunnings_yxGRhe": {
-      "type": "header-bunnings",
-      "name": "Bunnings Header",
-      "settings": {
-        "logo": "shopify://shop_images/BunningsWarehouseFestive-logo_1ddafb3d-10de-4b0e-8bb2-f12f06f6ab2b.svg",
-        "logo_width": 150,
-        "logo_height": 60,
-        "search_placeholder": "What can we help you find today?",
-        "show_popular_searches": false,
-        "popular_searches_text": "Popular searches",
-        "popular_search_1": "",
-        "popular_search_2": "",
-        "popular_search_3": "",
-        "popular_search_4": "",
-        "popular_search_5": "",
-        "show_lists": true,
-        "lists_text": "Lists",
-        "lists_url": "",
-        "background_color": "#0d5257",
-        "text_color": "#ffffff",
-        "hover_color": "rgba(255, 255, 255, 0.1)",
-        "search_background": "#ffffff",
-        "search_text_color": "#333333",
-        "search_border_color": "transparent",
-        "header_height": 80
       }
     }
   },
