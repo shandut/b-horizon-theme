@@ -12,5 +12,143 @@
   "context": {
     "market": "fiji"
   },
-  "sections": {}
+  "sections": {
+    "hero_QkGJi": {
+      "type": "hero",
+      "disabled": false,
+      "settings": {
+        "header-80496e5ac0647ac25ef81ca001c71421": null,
+        "media_type_1": "image",
+        "image_1": null,
+        "video_1": null,
+        "header-7745bf8ea9329094313b1320f77f9146": null,
+        "media_type_2": "image",
+        "image_2": null,
+        "video_2": null,
+        "header-ff252f1f6046be91ef6bb0b65c69f921": null,
+        "stack_media_on_mobile": false,
+        "custom_mobile_media": false,
+        "media_type_1_mobile": "image",
+        "image_1_mobile": null,
+        "video_1_mobile": null,
+        "media_type_2_mobile": "image",
+        "image_2_mobile": null,
+        "video_2_mobile": null,
+        "header-8b00a0a78854dbf4b2baf848a614f3a0": null,
+        "link": "",
+        "open_in_new_tab": false,
+        "header-7444a7ec80568c3c9bc28cfcfe278826": null,
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "large",
+        "section_height_custom": 50,
+        "header-53fb4dba4cf8d3b1db67a4be8cbe3c82": null,
+        "color_scheme": "scheme-5",
+        "toggle_overlay": true,
+        "overlay_color": "#00000026",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "blurred_reflection": false,
+        "reflection_opacity": 75,
+        "header-3bea596dae0fc166569cd4575ab18500": null,
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      },
+      "blocks": {
+        "text_8RHfB": {
+          "type": "text",
+          "disabled": false,
+          "settings": {
+            "text": "<h1>New arrivals</h1>",
+            "header-06847ea3bdb9faae7f8da504d429ad5c": null,
+            "width": "fit-content",
+            "max_width": "narrow",
+            "alignment": "left",
+            "header-ad18fa865519fa3987dc1dc17c39f47f": null,
+            "type_preset": "h1",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "header-346cf0db5478b811f2ebfcd4ec35dc3c": null,
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "header-b7dc3069fe3100dc197018133618c953": null,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "text_ajJDj": {
+          "type": "text",
+          "disabled": false,
+          "settings": {
+            "text": "<p>Made with care and unconditionally loved by our customers.</p>",
+            "header-14aac8069f61f76bbde9829b7f3a4f0a": null,
+            "width": "fit-content",
+            "max_width": "narrow",
+            "alignment": "left",
+            "header-db07115fb626527f7cc1a569918a9c6d": null,
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "header-5dda7f8d68deaf45cd7adf7d5ce4c8d8": null,
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "header-56f2b44cfac76c633f27b3dae23dabea": null,
+            "padding-block-start": 0,
+            "padding-block-end": 32,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "button_cLxc7": {
+          "type": "button",
+          "name": "t:names.button",
+          "disabled": false,
+          "settings": {
+            "label": "Shop now",
+            "link": "shopify://collections/all",
+            "open_in_new_tab": false,
+            "style_class": "button",
+            "header-41f0b50a396cd3b72668ecb1fb98a275": null,
+            "width": "fit-content",
+            "custom_width": 100,
+            "width_mobile": "fit-content",
+            "custom_width_mobile": 100
+          }
+        }
+      },
+      "block_order": [
+        "text_8RHfB",
+        "text_ajJDj",
+        "button_cLxc7"
+      ],
+      "name": "t:names.hero"
+    }
+  },
+  "order": [
+    "hero_jVaWmY",
+    "promo_grid_bunnings",
+    "product_list_fa6P9H",
+    "hero_QkGJi"
+  ]
 }
